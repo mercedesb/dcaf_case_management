@@ -229,6 +229,14 @@ class Patient < ApplicationRecord
     all_versions.sort_by(&:created_at).reverse
   end
 
+  def as_json
+    super.merge(
+      status: status,
+      last_menstrual_period_at_appt_weeks: last_menstrual_period_at_appt_weeks,
+      last_menstrual_period_at_appt_days: last_menstrual_period_at_appt_days
+    )
+  end
+
   private
 
   def confirm_appointment_after_initial_call
