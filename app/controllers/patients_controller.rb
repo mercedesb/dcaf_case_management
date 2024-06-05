@@ -124,7 +124,22 @@ class PatientsController < ApplicationController
       error = @patient.errors.full_messages.to_sentence
       flash.now[:alert] = error
     end
-    respond_to { |format| format.js }
+
+    respond_to do |format|
+      format.js
+      format.json do
+        if error
+          render json: { flash: { alert: error } }, status: :unprocessable_entity
+        else
+          render json: {
+            patient: @patient.reload.as_json,
+            flash: {
+              notice: t('flash.patient_info_saved', timestamp: Time.zone.now.display_timestamp)
+            }
+          }, status: :ok
+        end
+      end
+    end
   end
 
   def data_entry
