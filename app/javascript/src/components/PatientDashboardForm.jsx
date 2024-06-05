@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from './Input'
 import Select from './Select'
 import mount from "../mount";
-import { usei18n } from "../hooks";
+import { usei18n, useFetch } from "../hooks";
 
 const PatientDashboardForm = ({
   patient,
@@ -11,20 +11,40 @@ const PatientDashboardForm = ({
   initialCallDate,
   statusTooltip,
   isAdmin,
-  patientPath
+  patientPath,
+  formAuthenticityToken
 }) => {
   const i18n = usei18n();
+  const { put } = useFetch();
 
-  console.log(`patient_initial_call_date: ${patient.initial_call_date}`);
+  const [patientData, setPatientData] = useState(patient)
+
+  const autosave = async (updatedData) => {
+    const updatedPatientData = { ...patientData, ...updatedData }
+    setPatientData(updatedPatientData)
+
+    const data = await put(patientPath, { ...updatedPatientData, authenticity_token: formAuthenticityToken })
+    if (data.errors) {
+      // TODO: handle error
+    } else {
+      setPatientData(data)
+    }
+  }
 
   return (
-    <div className="grid grid-columns-3 grid-rows-2">
+    <form
+      id="patient_dashboard_form"
+      action={patientPath}
+      data-remote="true" method="post"
+      className="grid grid-columns-3 grid-rows-2"
+    >
       <Input
         id="patient_name"
         name="patient[name]"
         label={i18n.t('patient.shared.name')}
-        value={patient.name}
+        value={patientData.name}
         required
+        onChange={e => autosave({ name: e.target.value })}
       />
 
       <div className="grid grid-columns-2">
@@ -33,7 +53,8 @@ const PatientDashboardForm = ({
           name="patient[last_menstrual_period_weeks"
           label={i18n.t('patient.dashboard.weeks_along')}
           options={weeksOptions}
-          value={weeksOptions.find(opt => opt.selected)?.value}
+          value={weeksOptions.find(opt => opt.value === patientData.last_menstrual_period_weeks)?.value}
+          onChange={e => autosave({ last_menstrual_period_weeks: e.target.value })}
         />
 
         <Select
@@ -42,8 +63,9 @@ const PatientDashboardForm = ({
           label={i18n.t('common.days_along')}
           labelClassName="sr-only"
           options={daysOptions}
-          value={daysOptions.find(opt => opt.selected)?.value}
+          value={weeksOptions.find(opt => opt.value === patientData.last_menstrual_period_days)?.value}
           help={i18n.t('patient.dashboard.called_on', { date: initialCallDate })}
+          onChange={e => autosave({ last_menstrual_period_days: e.target.value })}
         />
       </div>
 
@@ -54,17 +76,20 @@ const PatientDashboardForm = ({
         type="date"
         help={
           i18n.t('patient.dashboard.approx_gestation', {
-            weeks: patient.last_menstrual_period_at_appt_weeks,
-            days: patient.last_menstrual_period_at_appt_days
+            weeks: patientData.last_menstrual_period_at_appt_weeks,
+            days: patientData.last_menstrual_period_at_appt_days
           })
         }
+        value={patientData.appointment_date}
+        onChange={e => autosave({ appointment_date: e.appointment_date })}
       />
 
       <Input
         id="patient_primary_phone"
         name="patient[primary_phone]"
         label={i18n.t('patient.dashboard.phone')}
-        value={patient.primary_phone_display}
+        value={patientData.primary_phone_display}
+        onChange={e => autosave({ primary_phone_display: e.target.value })}
       />
 
       <div className="grid grid-columns-2">
@@ -72,15 +97,17 @@ const PatientDashboardForm = ({
           id="patient_pronouns"
           name="patient[pronouns]"
           label={i18n.t('activerecord.attributes.patient.pronouns')}
-          value={patient.pronouns}
+          value={patientData.pronouns}
+          onChange={e => autosave({ pronouns: e.target.value })}
         />
 
         <Input
           id="patient_status_display"
           label={i18n.t('patient.shared.status')}
-          value={patient.status}
+          value={patientData.status}
           className="form-control-plaintext"
           tooltip={statusTooltip}
+          onChange={e => autosave({ status: e.target.value })}
         />
       </div>
 
@@ -95,7 +122,7 @@ const PatientDashboardForm = ({
           </>
         )}
       </div>
-    </div>
+    </form>
   )
 };
 

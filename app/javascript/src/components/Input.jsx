@@ -18,9 +18,9 @@ export default Input = ({
   const inputClassNames = `form-control ${className || ''} ${labelClassNames.includes('sr-only') ? 'mt-6' : ''}`
 
   if (!!onChange) {
-    props["value"] = value
+    props["value"] = value || ""
   } else {
-    props["defaultValue"] = value
+    props["defaultValue"] = value || ""
   }
 
   return (
