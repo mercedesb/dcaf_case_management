@@ -38,12 +38,12 @@ describe("useFetch", () => {
     });
 
     it("returns the expected response", () => {
-      const { get } = useApi();
+      const { get } = useFetch();
       expect(get(url)).resolves.toEqual(mockResponse);
     });
 
-    it("calls fetch with the expected parameters", async (done) => {
-      const { get } = useApi();
+    it("calls fetch with the expected parameters", async () => {
+      const { get } = useFetch();
       await get(url);
       expect(global.fetch).toHaveBeenCalledWith(
         url,
@@ -56,12 +56,11 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
-    it("calls fetch with the custom headers", async (done) => {
-      const { get } = useApi();
+    it("calls fetch with the custom headers", async () => {
+      const { get } = useFetch();
       await get(url, customHeaders);
       expect(global.fetch).toHaveBeenCalledWith(
         url,
@@ -74,7 +73,6 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
@@ -92,7 +90,7 @@ describe("useFetch", () => {
         });
 
         it("returns an empty json object", (done) => {
-          const { get } = useApi();
+          const { get } = useFetch();
           const response = get(url);
           expect(response).toEqual(Promise.resolve({}));
 
@@ -105,7 +103,7 @@ describe("useFetch", () => {
 
       describe("when the status code is any other successful status", () => {
         it("returns the response as json", (done) => {
-          const { get } = useApi();
+          const { get } = useFetch();
           const response = get(url);
           expect(response).toEqual(mockJsonPromise);
 
@@ -133,7 +131,7 @@ describe("useFetch", () => {
 
         describe("without an onUnauthorized handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { get } = useApi();
+            const { get } = useFetch();
             const response = get(url);
             expect(response).toEqual(mockJsonPromise);
 
@@ -147,7 +145,7 @@ describe("useFetch", () => {
         describe("with an onUnauthorized handler passed in", () => {
           it("calls the onUnauthorized", async () => {
             const onUnauthorized = jest.fn(() => 3);
-            const { get } = useApi(onUnauthorized);
+            const { get } = useFetch(onUnauthorized);
             await get(url);
             expect(onUnauthorized).toHaveBeenCalled();
           });
@@ -169,7 +167,7 @@ describe("useFetch", () => {
 
         describe("without an onError handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { get } = useApi();
+            const { get } = useFetch();
             const response = get(url);
             expect(response).toEqual(mockJsonPromise);
 
@@ -182,7 +180,7 @@ describe("useFetch", () => {
           describe("with an onError handler passed in", () => {
             it("calls the onError", async () => {
               const onError = jest.fn(() => 3);
-              const { get } = useApi(null, onError);
+              const { get } = useFetch(null, onError);
               await get(url);
               expect(onError).toHaveBeenCalled();
             });
@@ -208,12 +206,12 @@ describe("useFetch", () => {
     });
 
     it("returns the expected response", () => {
-      const { post } = useApi();
+      const { post } = useFetch();
       expect(post(url, data)).resolves.toEqual(mockResponse);
     });
 
-    it("calls fetch with the expected parameters", async (done) => {
-      const { post } = useApi();
+    it("calls fetch with the expected parameters", async () => {
+      const { post } = useFetch();
       await post(url, data);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -227,12 +225,11 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
-    it("calls fetch with the custom headers", async (done) => {
-      const { post } = useApi();
+    it("calls fetch with the custom headers", async () => {
+      const { post } = useFetch();
       await post(url, data, customHeaders);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -246,7 +243,6 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
@@ -264,7 +260,7 @@ describe("useFetch", () => {
         });
 
         it("returns an empty json object", (done) => {
-          const { post } = useApi();
+          const { post } = useFetch();
           const response = post(url, data);
           expect(response).toEqual(Promise.resolve({}));
 
@@ -277,7 +273,7 @@ describe("useFetch", () => {
 
       describe("when the status code is any other successful status", () => {
         it("returns the response as json", (done) => {
-          const { post } = useApi();
+          const { post } = useFetch();
           const response = post(url, data);
           expect(response).toEqual(mockJsonPromise);
 
@@ -306,7 +302,7 @@ describe("useFetch", () => {
 
         describe("without an onUnauthorized handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { post } = useApi();
+            const { post } = useFetch();
             const response = post(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -320,7 +316,7 @@ describe("useFetch", () => {
         describe("with an onUnauthorized handler passed in", () => {
           it("calls the onUnauthorized", async () => {
             const onUnauthorized = jest.fn();
-            const { post } = useApi(onUnauthorized);
+            const { post } = useFetch(onUnauthorized);
             await post(url, data);
             expect(onUnauthorized).toHaveBeenCalled();
           });
@@ -342,7 +338,7 @@ describe("useFetch", () => {
 
         describe("without an onError handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { post } = useApi();
+            const { post } = useFetch();
             const response = post(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -356,7 +352,7 @@ describe("useFetch", () => {
         describe("with an onError handler passed in", () => {
           it("calls the onError", async () => {
             const onError = jest.fn();
-            const { post } = useApi(null, onError);
+            const { post } = useFetch(null, onError);
             await post(url, data);
             expect(onError).toHaveBeenCalled();
           });
@@ -381,12 +377,12 @@ describe("useFetch", () => {
     });
 
     it("returns the expected response", () => {
-      const { put } = useApi();
+      const { put } = useFetch();
       expect(put(url, data)).resolves.toEqual(mockResponse);
     });
 
-    it("calls fetch with the expected parameters", async (done) => {
-      const { put } = useApi();
+    it("calls fetch with the expected parameters", async () => {
+      const { put } = useFetch();
       await put(url, data);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -400,12 +396,11 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
-    it("calls fetch with the custom headers", async (done) => {
-      const { put } = useApi();
+    it("calls fetch with the custom headers", async () => {
+      const { put } = useFetch();
       await put(url, data, customHeaders);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -419,7 +414,6 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
@@ -437,7 +431,7 @@ describe("useFetch", () => {
         });
 
         it("returns an empty json object", (done) => {
-          const { put } = useApi();
+          const { put } = useFetch();
           const response = put(url, data);
           expect(response).toEqual(Promise.resolve({}));
 
@@ -450,7 +444,7 @@ describe("useFetch", () => {
 
       describe("when the status code is any other successful status", () => {
         it("returns the response as json", (done) => {
-          const { put } = useApi();
+          const { put } = useFetch();
           const response = put(url, data);
           expect(response).toEqual(mockJsonPromise);
 
@@ -479,7 +473,7 @@ describe("useFetch", () => {
 
         describe("without an onUnauthorized handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { put } = useApi();
+            const { put } = useFetch();
             const response = put(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -493,7 +487,7 @@ describe("useFetch", () => {
         describe("with an onUnauthorized handler passed in", () => {
           it("calls the onUnauthorized", async () => {
             const onUnauthorized = jest.fn();
-            const { put } = useApi(onUnauthorized);
+            const { put } = useFetch(onUnauthorized);
             await put(url, data);
             expect(onUnauthorized).toHaveBeenCalled();
           });
@@ -515,7 +509,7 @@ describe("useFetch", () => {
 
         describe("without an onError handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { put } = useApi();
+            const { put } = useFetch();
             const response = put(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -528,7 +522,7 @@ describe("useFetch", () => {
           describe("with an onError handler passed in", () => {
             it("calls the onError", async () => {
               const onError = jest.fn();
-              const { put } = useApi(null, onError);
+              const { put } = useFetch(null, onError);
               await put(url, data);
               expect(onError).toHaveBeenCalled();
             });
@@ -554,12 +548,12 @@ describe("useFetch", () => {
     });
 
     it("returns the expected response", () => {
-      const { patch } = useApi();
+      const { patch } = useFetch();
       expect(patch(url, data)).resolves.toEqual(mockResponse);
     });
 
-    it("calls fetch with the expected parameters", async (done) => {
-      const { patch } = useApi();
+    it("calls fetch with the expected parameters", async () => {
+      const { patch } = useFetch();
       await patch(url, data);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -573,12 +567,11 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
-    it("calls fetch with the custom headers", async (done) => {
-      const { patch } = useApi();
+    it("calls fetch with the custom headers", async () => {
+      const { patch } = useFetch();
       await patch(url, data, customHeaders);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -592,7 +585,6 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
@@ -610,7 +602,7 @@ describe("useFetch", () => {
         });
 
         it("returns an empty json object", (done) => {
-          const { patch } = useApi();
+          const { patch } = useFetch();
           const response = patch(url, data);
           expect(response).toEqual(Promise.resolve({}));
 
@@ -623,7 +615,7 @@ describe("useFetch", () => {
 
       describe("when the status code is any other successful status", () => {
         it("returns the response as json", (done) => {
-          const { patch } = useApi();
+          const { patch } = useFetch();
           const response = patch(url, data);
           expect(response).toEqual(mockJsonPromise);
 
@@ -652,7 +644,7 @@ describe("useFetch", () => {
 
         describe("without an onUnauthorized handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { patch } = useApi();
+            const { patch } = useFetch();
             const response = patch(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -666,7 +658,7 @@ describe("useFetch", () => {
         describe("with an onUnauthorized handler passed in", () => {
           it("calls the onUnauthorized", async () => {
             const onUnauthorized = jest.fn();
-            const { patch } = useApi(onUnauthorized);
+            const { patch } = useFetch(onUnauthorized);
             await patch(url, data);
             expect(onUnauthorized).toHaveBeenCalled();
           });
@@ -688,7 +680,7 @@ describe("useFetch", () => {
 
         describe("without an onError handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { patch } = useApi();
+            const { patch } = useFetch();
             const response = patch(url, data);
             expect(response).toEqual(mockJsonPromise);
 
@@ -701,7 +693,7 @@ describe("useFetch", () => {
           describe("with an onError handler passed in", () => {
             it("calls the onError", async () => {
               const onError = jest.fn();
-              const { patch } = useApi(null, onError);
+              const { patch } = useFetch(null, onError);
               await patch(url, data);
               expect(onError).toHaveBeenCalled();
             });
@@ -726,12 +718,12 @@ describe("useFetch", () => {
     });
 
     it("returns the expected response", () => {
-      const { del } = useApi();
+      const { del } = useFetch();
       expect(del(url)).resolves.toEqual(mockResponse);
     });
 
-    it("calls fetch with the expected parameters", async (done) => {
-      const { del } = useApi();
+    it("calls fetch with the expected parameters", async () => {
+      const { del } = useFetch();
       await del(url);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -745,12 +737,11 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
-    it("calls fetch with the custom headers", async (done) => {
-      const { del } = useApi();
+    it("calls fetch with the custom headers", async () => {
+      const { del } = useFetch();
       await del(url, customHeaders);
 
       expect(global.fetch).toHaveBeenCalledWith(
@@ -764,7 +755,6 @@ describe("useFetch", () => {
 
       process.nextTick(() => {
         global.fetch.mockClear();
-        done();
       });
     });
 
@@ -782,7 +772,7 @@ describe("useFetch", () => {
         });
 
         it("returns an empty json object", (done) => {
-          const { del } = useApi();
+          const { del } = useFetch();
           const response = del(url);
           expect(response).toEqual(Promise.resolve({}));
 
@@ -795,7 +785,7 @@ describe("useFetch", () => {
 
       describe("when the status code is any other successful status", () => {
         it("returns the response as json", (done) => {
-          const { del } = useApi();
+          const { del } = useFetch();
           const response = del(url);
           expect(response).toEqual(mockJsonPromise);
 
@@ -823,7 +813,7 @@ describe("useFetch", () => {
 
         describe("without an onUnauthorized handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { del } = useApi();
+            const { del } = useFetch();
             const response = del(url);
             expect(response).toEqual(mockJsonPromise);
 
@@ -837,7 +827,7 @@ describe("useFetch", () => {
         describe("with an onUnauthorized handler passed in", () => {
           it("calls the unauthorizedHandler", async () => {
             const onUnauthorized = jest.fn();
-            const { del } = useApi(onUnauthorized);
+            const { del } = useFetch(onUnauthorized);
             await del(url);
             expect(onUnauthorized).toHaveBeenCalled();
           });
@@ -859,7 +849,7 @@ describe("useFetch", () => {
 
         describe("without an onError handler passed in", () => {
           it("returns the response as json", (done) => {
-            const { del } = useApi();
+            const { del } = useFetch();
             const response = del(url);
             expect(response).toEqual(mockJsonPromise);
 
@@ -872,7 +862,7 @@ describe("useFetch", () => {
           describe("with an onError handler passed in", () => {
             it("calls the onError", async () => {
               const onError = jest.fn();
-              const { del } = useApi(null, onError);
+              const { del } = useFetch(null, onError);
               await del(url);
               expect(onError).toHaveBeenCalled();
             });
