@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Input from './Input'
 import Select from './Select'
 import mount from "../mount";
-import { usei18n, useFetch } from "../hooks";
+import { usei18n, useFetch, useFlash } from "../hooks";
 
 const PatientDashboardForm = ({
   patient,
@@ -16,6 +16,7 @@ const PatientDashboardForm = ({
 }) => {
   const i18n = usei18n();
   const { put } = useFetch();
+  const flash = useFlash();
 
   const [patientData, setPatientData] = useState(patient)
 
@@ -24,9 +25,8 @@ const PatientDashboardForm = ({
     setPatientData(updatedPatientData)
 
     const data = await put(patientPath, { ...updatedPatientData, authenticity_token: formAuthenticityToken })
-    if (data.errors) {
-      // TODO: handle error
-    } else {
+    flash(data.flash)
+    if (data.patient) {
       setPatientData(data)
     }
   }
