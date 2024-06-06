@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Input from './Input'
 import Select from './Select'
+import Tooltip from './Tooltip'
 import mount from "../mount";
 import { usei18n, useFetch, useFlash } from "../hooks";
 
@@ -9,7 +10,7 @@ export default PatientDashboardForm = ({
   weeksOptions,
   daysOptions,
   initialCallDate,
-  statusTooltip,
+  statusHelpText,
   isAdmin,
   patientPath,
   formAuthenticityToken
@@ -30,6 +31,8 @@ export default PatientDashboardForm = ({
       setPatientData(data)
     }
   }
+
+  const statusTooltip = <Tooltip text={statusHelpText} />
 
   return (
     <form

@@ -12,6 +12,7 @@ export default Input = ({
   labelClassName,
   autocomplete = "off",
   onChange,
+  tooltip,
   ...props
 }) => {
   const labelClassNames = `${required ? 'required' : ''} ${labelClassName || ''}`
@@ -27,6 +28,7 @@ export default Input = ({
     <div className="form-group">
       <label className={labelClassNames} htmlFor={id}>
         {label}
+        {tooltip}
       </label>
       <input type={type} name={name} id={id} required={required} autoComplete={autocomplete} className={inputClassNames} onChange={onChange} {...props}></input>
       {help && <small className="form-text text-muted">{help}</small>}
