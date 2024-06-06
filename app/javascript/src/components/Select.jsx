@@ -4,7 +4,7 @@ export default Select = ({
   label,
   name,
   id,
-  options,
+  options = [],
   required,
   help,
   className,

@@ -4,7 +4,7 @@ import Select from './Select'
 import mount from "../mount";
 import { usei18n, useFetch, useFlash } from "../hooks";
 
-const PatientDashboardForm = ({
+export default PatientDashboardForm = ({
   patient,
   weeksOptions,
   daysOptions,
@@ -25,7 +25,7 @@ const PatientDashboardForm = ({
     setPatientData(updatedPatientData)
 
     const data = await put(patientPath, { ...updatedPatientData, authenticity_token: formAuthenticityToken })
-    flash(data.flash)
+    flash.render(data.flash)
     if (data.patient) {
       setPatientData(data)
     }
@@ -50,7 +50,7 @@ const PatientDashboardForm = ({
       <div className="grid grid-columns-2">
         <Select
           id="pateint_last_menstrual_period_weeks"
-          name="patient[last_menstrual_period_weeks"
+          name="patient[last_menstrual_period_weeks]"
           label={i18n.t('patient.dashboard.weeks_along')}
           options={weeksOptions}
           value={weeksOptions.find(opt => opt.value === patientData.last_menstrual_period_weeks)?.value}
@@ -59,7 +59,7 @@ const PatientDashboardForm = ({
 
         <Select
           id="pateint_last_menstrual_period_days"
-          name="patient[last_menstrual_period_days"
+          name="patient[last_menstrual_period_days]"
           label={i18n.t('common.days_along')}
           labelClassName="sr-only"
           options={daysOptions}
