@@ -32,7 +32,7 @@ export default PatientDashboardForm = ({
     }
   }
 
-  const statusTooltip = <Tooltip text={statusHelpText} />
+  const statusTooltip = statusHelpText ? <Tooltip text={statusHelpText} /> : null
 
   return (
     <form

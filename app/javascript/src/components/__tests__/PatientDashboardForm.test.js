@@ -3,6 +3,8 @@ import { screen, render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import PatientDashboardForm from "../PatientDashboardForm";
 
+jest.mock("../Tooltip", () => () => <div>tooltip</div>);
+
 let mockReturnValue = {};
 const mockPut = jest.fn(() => Promise.resolve(mockReturnValue));
 jest.mock("../../hooks/useFetch", () => () => ({
